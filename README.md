@@ -4,13 +4,13 @@ Using the SpeechRecognition module, this python script takes in user input speec
 
 ## Requirements
 
-To give SpeechRecognition access to your device's microphone, you will need to install pyaudio. For Mac users, you will first need to install portaudio by using this command in your terminal: brew install portaudio
+To give SpeechRecognition access to your device's microphone, you will need to install pyaudio. For Mac users, you will first need to install portaudio by using this command in your terminal: **brew install portaudio**
 
-And to now install pyaudio use this command in your terminal: pip install pyaudio
+And to now install pyaudio use this command in your terminal: **pip install pyaudio**
 
 You will also need an API key from the Open Weather Map API. To do this just create a free account and get your API key from: <https://openweathermap.org/api>.
 
-To install the rest of the requirements use this command in the directory where you stored the file requirements.txt: pip install -r requirements.txt
+To install the rest of the requirements use this command in the directory where you stored the file requirements.txt: **pip install -r requirements.txt**
 
 
 ## Usage
