@@ -1,6 +1,6 @@
 ## Descitpion
 
-Using the SpeechRecognition module, this python script takes in user input speech through your device's microphone and is able to perform a variety of commands based off that input. This voice assistant is able to visit websites, search Google, give you the weather of your city, solve simple equations, and even play a game of hangman with the user, all with the sound of your voice.
+Using the SpeechRecognition module, this python script takes in user input speech through your device's microphone and is able to perform a variety of commands based off that input and ouptut the response through your device's speakers. This voice assistant is able to visit websites, search Google, give you the weather of your city, solve simple equations, and even play a game of hangman with the user, all with the sound of your voice.
 
 ## Requirements
 
@@ -15,5 +15,5 @@ To install the rest of the requirements use this command in the directory where 
 
 ## Usage
 
-After installing all required packages, just run Voice_Assist.py in your terminal or any other python interpreter that has access to your device's microphones.
+After installing all required packages, just run Voice_Assist.py in your terminal or any other python interpreter that has access to your device's microphones and ask away.
 

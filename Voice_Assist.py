@@ -2,31 +2,34 @@ import speech_recognition as sr
 from geotext import GeoText
 import webbrowser
 import requests
+import pyttsx3
 import random
 import json
 import time
+
+engine = pyttsx3.init()
 
 # Opens a new tab and visits
 # the specified website
 def visit_Site(audio):
 
     if '.com' in audio or '.org' in audio:
-        site = audio.partition("visit ")[2]
-        print("\nVisiting " + str(site))
-        time.sleep(1)
+        site = audio.partition("check ")[2]
+        engine.say("Visiting " + str(site))
+        engine.runAndWait()
 
         # Opens new tab to website
         webbrowser.open_new_tab("http://www." + str(site))
 
     else:
-        site = audio.partition("visit ")[2]
-        print("\nVisiting " + str(site))
-        time.sleep(1)
+        site = audio.partition("check ")[2]
+        engine.say("Visiting " + str(site))
+        engine.runAndWait()
 
         # Opens new tab to website
         webbrowser.open_new_tab("http://www." + str(site) + ".com")
 
-    time.sleep(4)
+    time.sleep(3)
 
 
 # Opens a new tab and performs a 
@@ -34,12 +37,13 @@ def visit_Site(audio):
 def search_Google(audio):
 
     query = audio.partition("search ")[2]
-    print("Searching Google for: " + str(query))
+    engine.say("Searching Google for: " + str(query))
+    engine.runAndWait()
 
     # Opens Google with specified search
     webbrowser.open("https://www.google.com/search?q=" + str(query))
 
-    time.sleep(4)
+    time.sleep(3)
 
 
 # Inititates a game of hangman with the user
@@ -47,7 +51,7 @@ def play_hangman():
     
     # All the possible words to guess
     words = ["pizza", "sleep", "bike", "apple", "tea",
-             "java", "facebook", "helsinki", "develope", "hammer"]
+             "", "facebook", "helsinki", "develope", "hammer"]
 
     # Picks a random word from the list
     word = random.choice(words)
@@ -57,10 +61,13 @@ def play_hangman():
     num_guesses = 0
     guesses = ""
 
-    print("\nLets play hangman. You can only get 6 guesses wrong or else you lose.\n")
-    time.sleep(3)
+    engine.say("Lets play hangman. You can only get 6 guesses wrong or else you lose. Let's begin")
+    engine.runAndWait()
+    time.sleep(2)
 
     while num_guesses != 6:
+
+        exception = 0
 
         # Prints out status of the current game
         print("\n" + "-" * 43)
@@ -77,50 +84,59 @@ def play_hangman():
 
         # Listens and get user input through internal Microphones
         with mic as source:
-            print("\nWhat is your guess? (speak loud and clear)")
-            print("Listening.....\n")
+            engine.say("What is your guess?")
+            engine.runAndWait()
             rec.adjust_for_ambient_noise(source)
             audio = rec.listen(source)
             
         # Tries to recognize what the user said
         try:
             phrase = rec.recognize_google(audio)
-            print("Your guess: " + str(phrase))
+            engine.say("Your guess was the letter " + str(phrase))
+            engine.runAndWait
+            print("\nYour guess: " + str(phrase))
 
         except sr.UnknownValueError:
-            phrase = "Unable to recognize speech. Try again....."
-            print(phrase + "\n")
+            phrase = "Unable to recognize speech. Try again"
+            engine.say(str(phrase))
+            engine.runAndWait()
+            exception = 1
 
     
-        if not phrase.isalpha():
-            print("\nMake sure your guess is only a letter.")
+        if not phrase.isalpha() and not exception:
+            engine.say("Invalid guess, make sure your guess is only a letter.")
+            engine.runAndWait()
         
         elif phrase.lower() == word:
 
             print("\n" + "*" * 37)
             print("YOU WON! The word was: " + str(word))
             print("*" * 37 + "\n")
-            time.sleep(2)
+            
+            engine.say("YOU WON! The word was " + str(word))
+            engine.runAndWait()
 
             print_Menu()
-            time.sleep(2)
+            time.sleep(1)
             return
 
-        elif len(phrase.lower()) > 1 and phrase.lower() != word:
+        elif len(phrase.lower()) > 1 and phrase.lower() != word and not exception:
 
-            print("\nINCORRECT GUESS. " + str(phrase.lower()) + " is not the word.\n")
+            engine.say("INCORRECT GUESS. " + str(phrase.lower()) + " is not the word.")
+            engine.runAndWait()
 
             num_guesses += 1
-            time.sleep(1.5)
+            time.sleep(1)
 
-        elif phrase.lower() not in word:
+        elif phrase.lower() not in word and not exception:
 
-            print("\nINCORRECT GUESS. " + str(phrase.lower()) + " is not in the word.\n")
+            engine.say("INCORRECT GUESS. The letter " + str(phrase.lower()) + " is not in the word.")
+            engine.runAndWait()
 
             guesses += phrase.lower()
 
             num_guesses += 1
-            time.sleep(1.5)
+            time.sleep(1)
 
         elif phrase.lower() in word:
 
@@ -130,14 +146,19 @@ def play_hangman():
             check = ""
             status = check.join(blanks)
 
+            engine.say("CORRECT! The letter " + str(phrase.lower()) + " is in the word")
+            engine.runAndWait()
+
             if status == word:
                 print("\n" + "*" * 37)
                 print("YOU WON! The word was: " + str(word))
                 print("*" * 37 + "\n")
-                time.sleep(2)
+               
+                engine.say("YOU WON! The word was: " + str(word))
+                engine.runAndWait()
 
                 print_Menu()
-                time.sleep(2)
+                time.sleep(1)
                 return
 
     # Prints loser message if the user
@@ -145,10 +166,12 @@ def play_hangman():
     print("\n" + ":( " * 11)
     print("YOU LOST! The word was: " + str(word))
     print(":( " * 11 + "\n")
-    time.sleep(1.5)
+    
+    engine.say("YOU LOST! The word was: " + str(word))
+    engine.runAndWait()
     
     print_Menu()
-    time.sleep(2)
+    time.sleep(1)
 
 
 
@@ -164,24 +187,29 @@ def calculate(audio):
     # Extract the whole expression from the user input speech
     expression = audio.partition("compute ")[2]
 
-    if len(nums) > 1 and len(expression) > 0:    
-        print("\n" + str(expression) + " is equal to: ", end = '')
 
-        print(eval(expression))
+    if len(nums) > 1 and len(expression) > 0:    
+
+        answer = eval(expression)
+
+        rounded = round(answer, 2)
+
+        engine.say(str(expression) + " is equal to: " + str(rounded))
+        engine.runAndWait()
 
     else:
-        print("\nSorry, can you say the equation one more time?")
+        engine.say("Sorry, can you say the equation one more time?")
+        engine.runAndWait()
 
-    time.sleep(2)
+    time.sleep(1)
 
 
 
-# Gets the current weather of
-# the specified city through the 
-# OpenWeatherMap API
+# Gets the current weather of the 
+# specified city through the OpenWeatherMap API
 def get_Weather(audio):
 
-    my_API_key = "YOUR OPEN_WEATHER_MAP API KEY"
+    my_API_key = "bcad6bb03994e7963067bad0a49294b9"
 
     # URL to the OpenWeatherMap API
     url = "http://api.openweathermap.org/data/2.5/weather?"
@@ -194,7 +222,8 @@ def get_Weather(audio):
     # If no city is found in the input,
     # throws an error.
     if len(cities) == 0:
-        print("Sorry, this city was not found.")
+        engine.say("Sorry, this city was not found.")
+        engine.runAndWait()
         return
     else:
         city = cities[0]
@@ -208,8 +237,6 @@ def get_Weather(audio):
     # Gets weather data for the 
     # specified city
     if x["cod"] != "404":
-
-        print("\nWeather in " + str(city) + ": \n")
 
         y = x["main"]
 
@@ -227,15 +254,21 @@ def get_Weather(audio):
 
         weather_description = WD[0]["description"] 
 
-        print("- Temperature (fahrenheit): " + str(updated_temp) + "°F")
-        print("- Humidity (percentage): " + str(humidity) + "%")
-        print("- Wind speed (mph): " + str(wind_speed) + " mph")
-        print("- Description: " + str(weather_description))
+        engine.say("It is currently " + str(updated_temp) + " degrees fahrenheit")
+        engine.runAndWait()
+        engine.say("With a " + str(humidity) + " percent humidity percentage")
+        engine.runAndWait()
+        engine.say("Wind speed is " + str(wind_speed) + " miles per hour")
+        engine.runAndWait()
+        engine.say("And it is currently " + str(weather_description))
+        engine.runAndWait()
 
     else:
-        print("Sorry, this city does not exist in the database.")
+        engine.say("Sorry, this city does not exist in the database.")
+        engine.runAndWait()
 
     time.sleep(2)
+
 
 
 # Prints out main menu message
@@ -243,7 +276,7 @@ def print_Menu():
 
     print("*" * 60)
     print("COMMANDS:\n")
-    print("- To visit a specific site say: Visit \'_____\'")
+    print("- To visit a specific site say: Check \'_____\'")
     print("- To do a Google search say:    Search \'_____\'")
     print("- To play hangman game say:     Lets play")
     print("- To solve an equation say:     Compute \'__\' + - * / \'__\'")
@@ -261,7 +294,6 @@ def main():
     input("\nPress \'Enter\' to continue.\n")
 
     run = True
-
     while run:
 
         # Uses given methods from the 
@@ -272,8 +304,11 @@ def main():
 
         # Gets user input through internal Microphones
         with mic as source:
-            print("\nWhat would you like to do? (speak loud and clear)")
-            print("Listening.....\n")
+           # engine.say("What would you like me to do? (speak loud and clear)")
+            #engine.runAndWait()
+            engine.say("Now Listening")
+            engine.runAndWait()
+
             rec.adjust_for_ambient_noise(source)
             audio = rec.listen(source)
             
@@ -281,47 +316,42 @@ def main():
         # else, throws an error
         try:
             phrase = rec.recognize_google(audio)
-            print("You said: " + str(phrase))
+            engine.say("You said: " + str(phrase))
+            engine.runAndWait()
+            print("\nYou said: " + str(phrase) + "\n")
 
         except sr.UnknownValueError:
             phrase = "Unable to recognize command. Try again....."
-            print(phrase)
+            engine.say(str(phrase))
+            engine.runAndWait()
             exception = 1
 
-        # Checks the recognized speech to see
-        # if it is a valid command, else
-        # throws error message
-        if phrase.split()[0] == "visit":
+        # Checks the recognized speech to see if it 
+        # is a valid command, else throws error message
+        if "check" in phrase:
             visit_Site(phrase)
 
-        elif phrase.split()[0] == "search":
+        elif "search" in phrase:
             search_Google(phrase)
 
-        elif phrase == "let's play":
+        elif "let's play" in phrase:
             play_hangman()
 
-        elif phrase.split()[0] == "compute":
+        elif "compute" in phrase:
             calculate(phrase)
 
         elif "weather" in phrase:
             get_Weather(phrase)
 
         elif "quit" in phrase:
-            print("\nNow exiting voice assistant.\n")
+            engine.say("Now exiting voice assistant.")
+            engine.runAndWait()
             run = False
 
         elif not exception:
-            print("\n" + str(phrase) + " is not a valid command. Try again.....")
-            exception = 0
-            time.sleep(2)
+            engine.say(str(phrase) + " is not a valid command. Try again")
+            engine.runAndWait()
         
-
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
