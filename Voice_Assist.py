@@ -152,28 +152,28 @@ def play_hangman():
 
 
 
-# Solves a simple two number equation
+# Solves simple equations 
+# using the eval() function
 def calculate(audio):
 
     equation = str(audio)
     
-    # Gets all the numbers from the user input string
+    # Gets all the numbers from the user input speech
     nums = [int(i) for i in equation.split() if i.isdigit()]
 
-    if len(nums) == 2:
-        expression = audio.partition("compute ")[2]
+    # Extract the whole expression from the user input speech
+    expression = audio.partition("compute ")[2]
+
+    if len(nums) > 1 and len(expression) > 0:    
         print("\n" + str(expression) + " is equal to: ", end = '')
 
         print(eval(expression))
-
-    elif len(nums) != 2:
-        print("\nSorry, I can only solve equations of two numbers for now")
-        return
 
     else:
         print("\nSorry, can you say the equation one more time?")
 
     time.sleep(2)
+
 
 
 # Gets the current weather of
@@ -319,6 +319,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
