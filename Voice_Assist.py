@@ -209,7 +209,7 @@ def calculate(audio):
 # specified city through the OpenWeatherMap API
 def get_Weather(audio):
 
-    my_API_key = "bcad6bb03994e7963067bad0a49294b9"
+    my_API_key = "YOUR OPEN WEATHER MAP API KEY GOES HERE"
 
     # URL to the OpenWeatherMap API
     url = "http://api.openweathermap.org/data/2.5/weather?"
