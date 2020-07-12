@@ -160,58 +160,20 @@ def calculate(audio):
     # Gets all the numbers from the user input string
     nums = [int(i) for i in equation.split() if i.isdigit()]
 
-    if len(nums) != 2:
-        print("\nSorry, can you say the equation one more time?")
+    if len(nums) == 2:
+        expression = audio.partition("compute ")[2]
+        print("\n" + str(expression) + " is equal to: ", end = '')
+
+        print(eval(expression))
+
+    elif len(nums) != 2:
+        print("\nSorry, I can only solve equations of two numbers for now")
         return
-
-    # Checks for every case of possible operands
-    # in the user input string, performs that operation
-    if '*' in equation:
-
-        expression = audio.partition("compute ")[2]
-        print("\n" + str(expression) + " is equal to: ", end = '')
-
-        first_num = nums[0]
-        second_num = nums[1]
-
-        print(int(first_num) * int(second_num))
-
-    elif '/' in equation:
-    
-        expression = audio.partition("compute ")[2]
-        print("\n" + str(expression) + " is equal to: ", end = '')
-
-        first_num = nums[0]
-        second_num = nums[1]
-
-        print(int(first_num) / int(second_num))
-
-    elif '+' in equation:
-    
-        expression = audio.partition("compute ")[2]
-        print("\n" + str(expression) + " is equal to: ", end = '')
-
-        first_num = nums[0]
-        second_num = nums[1]
-
-        print(int(first_num) + int(second_num))
-
-    elif '-' in equation:
-    
-        expression = audio.partition("compute ")[2]
-        print("\n" + str(expression) + " is equal to: ", end = '')
-
-        first_num = nums[0]
-        second_num = nums[1]
-
-        print(int(first_num) - int(second_num))
 
     else:
         print("\nSorry, can you say the equation one more time?")
 
-
     time.sleep(2)
-
 
 
 # Gets the current weather of
@@ -357,3 +319,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
