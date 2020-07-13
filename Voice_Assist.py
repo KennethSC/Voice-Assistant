@@ -51,7 +51,7 @@ def play_hangman():
     
     # All the possible words to guess
     words = ["pizza", "sleep", "bike", "apple", "tea",
-             "", "facebook", "helsinki", "develope", "hammer"]
+             "time", "facebook", "helsinki", "develope", "hammer"]
 
     # Picks a random word from the list
     word = random.choice(words)
