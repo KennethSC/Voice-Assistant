@@ -194,7 +194,9 @@ def calculate(audio):
 
         rounded = round(answer, 2)
 
-        engine.say(str(expression) + " is equal to: " + str(rounded))
+        print("\n" + str(expression) + " is equal to " + str(rounded) + "\n")
+
+        engine.say("The answer is: "  + str(rounded))
         engine.runAndWait()
 
     else:
@@ -260,7 +262,7 @@ def get_Weather(audio):
         engine.runAndWait()
         engine.say("Wind speed is " + str(wind_speed) + " miles per hour")
         engine.runAndWait()
-        engine.say("And it is currently " + str(weather_description))
+        engine.say("And there are currently " + str(weather_description) + "s")
         engine.runAndWait()
 
     else:
@@ -268,7 +270,6 @@ def get_Weather(audio):
         engine.runAndWait()
 
     time.sleep(2)
-
 
 
 # Prints out main menu message
@@ -283,7 +284,6 @@ def print_Menu():
     print("- To get the weather say:       Weather in YOUR CITY")
     print("- To exit voice assistant say:  Quit")
     print("*" * 60)
-
 
 
 # Main driver function
