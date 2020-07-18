@@ -187,7 +187,6 @@ def calculate(audio):
     # Extract the whole expression from the user input speech
     expression = audio.partition("compute ")[2]
 
-
     if len(nums) > 1 and len(expression) > 0:    
 
         answer = eval(expression)
