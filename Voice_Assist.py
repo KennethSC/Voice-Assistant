@@ -15,17 +15,13 @@ def visit_Site(audio):
 
     if '.com' in audio or '.org' in audio:
         site = audio.partition("check ")[2]
-        engine.say("Visiting " + str(site))
-        engine.runAndWait()
-
+        speak("Visiting ", str(site))
         # Opens new tab to website
         webbrowser.open_new_tab("http://www." + str(site))
 
     else:
         site = audio.partition("check ")[2]
-        engine.say("Visiting " + str(site))
-        engine.runAndWait()
-
+        speak("Visiting ", str(site))
         # Opens new tab to website
         webbrowser.open_new_tab("http://www." + str(site) + ".com")
 
@@ -37,8 +33,7 @@ def visit_Site(audio):
 def search_Google(audio):
 
     query = audio.partition("search ")[2]
-    engine.say("Searching Google for: " + str(query))
-    engine.runAndWait()
+    speak("Searching Google for: ", str(query))
 
     # Opens Google with specified search
     webbrowser.open("https://www.google.com/search?q=" + str(query))
@@ -61,8 +56,7 @@ def play_hangman():
     num_guesses = 0
     guesses = ""
 
-    engine.say("Lets play hangman. You can only get 6 guesses wrong or else you lose. Let's begin")
-    engine.runAndWait()
+    speak("Lets play hangman. You can only get 6 guesses wrong or else you lose. Let's begin")
     time.sleep(2)
 
     while num_guesses != 6:
@@ -84,28 +78,24 @@ def play_hangman():
 
         # Listens and get user input through internal Microphones
         with mic as source:
-            engine.say("What is your guess?")
-            engine.runAndWait()
+            speak("What is your guess?")
             rec.adjust_for_ambient_noise(source)
             audio = rec.listen(source)
             
         # Tries to recognize what the user said
         try:
             phrase = rec.recognize_google(audio)
-            engine.say("Your guess was the letter " + str(phrase))
-            engine.runAndWait
+            speak("Your guess was the letter ", str(phrase))
             print("\nYour guess: " + str(phrase))
 
         except sr.UnknownValueError:
             phrase = "Unable to recognize speech. Try again"
-            engine.say(str(phrase))
-            engine.runAndWait()
+            speak(str(phrase))
             exception = 1
 
     
         if not phrase.isalpha() and not exception:
-            engine.say("Invalid guess, make sure your guess is only a letter.")
-            engine.runAndWait()
+            speak("Invalid guess, make sure your guess is only a letter.")
         
         elif phrase.lower() == word:
 
@@ -113,8 +103,7 @@ def play_hangman():
             print("YOU WON! The word was: " + str(word))
             print("*" * 37 + "\n")
             
-            engine.say("YOU WON! The word was " + str(word))
-            engine.runAndWait()
+            speak("YOU WON! The word was ", str(word))
 
             print_Menu()
             time.sleep(1)
@@ -154,8 +143,7 @@ def play_hangman():
                 print("YOU WON! The word was: " + str(word))
                 print("*" * 37 + "\n")
                
-                engine.say("YOU WON! The word was: " + str(word))
-                engine.runAndWait()
+                speak("YOU WON! The word was: ", str(word))
 
                 print_Menu()
                 time.sleep(1)
@@ -167,8 +155,7 @@ def play_hangman():
     print("YOU LOST! The word was: " + str(word))
     print(":( " * 11 + "\n")
     
-    engine.say("YOU LOST! The word was: " + str(word))
-    engine.runAndWait()
+    speak("YOU LOST! The word was: ", str(word))
     
     print_Menu()
     time.sleep(1)
@@ -195,13 +182,11 @@ def calculate(audio):
 
         print("\n" + str(expression) + " is equal to " + str(rounded) + "\n")
 
-        engine.say("The answer is: "  + str(rounded))
-        engine.runAndWait()
+        speak("The answer is: ", str(rounded))
 
     else:
-        engine.say("Sorry, can you say the equation one more time?")
-        engine.runAndWait()
-
+        speak("Sorry, can you say the equation one more time?")
+        
     time.sleep(1)
 
 
@@ -223,8 +208,7 @@ def get_Weather(audio):
     # If no city is found in the input,
     # throws an error.
     if len(cities) == 0:
-        engine.say("Sorry, this city was not found.")
-        engine.runAndWait()
+        speak("Sorry, this city was not found.")
         return
     else:
         city = cities[0]
@@ -265,10 +249,15 @@ def get_Weather(audio):
         engine.runAndWait()
 
     else:
-        engine.say("Sorry, this city does not exist in the database.")
-        engine.runAndWait()
-
+        speak("Sorry, this city does not exist in the database.")
+        
     time.sleep(2)
+
+
+def speak(sentence, arg = ''):
+    engine = pyttsx3.init()
+    engine.say(sentence + str(arg))
+    engine.runAndWait()
 
 
 # Prints out main menu message
@@ -303,10 +292,7 @@ def main():
 
         # Gets user input through internal Microphones
         with mic as source:
-           # engine.say("What would you like me to do? (speak loud and clear)")
-            #engine.runAndWait()
-            engine.say("Now Listening")
-            engine.runAndWait()
+            speak("Now Listening")
 
             rec.adjust_for_ambient_noise(source)
             audio = rec.listen(source)
@@ -315,14 +301,12 @@ def main():
         # else, throws an error
         try:
             phrase = rec.recognize_google(audio)
-            engine.say("You said: " + str(phrase))
-            engine.runAndWait()
+            speak("You said: ", str(phrase))
             print("\nYou said: " + str(phrase) + "\n")
 
         except sr.UnknownValueError:
             phrase = "Unable to recognize command. Try again....."
-            engine.say(str(phrase))
-            engine.runAndWait()
+            speak(str(phrase))
             exception = 1
 
         # Checks the recognized speech to see if it 
@@ -343,8 +327,7 @@ def main():
             get_Weather(phrase)
 
         elif "quit" in phrase:
-            engine.say("Now exiting voice assistant.")
-            engine.runAndWait()
+            speak("Now exiting voice assistant.")
             run = False
 
         elif not exception:
