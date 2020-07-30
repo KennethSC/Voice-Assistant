@@ -293,8 +293,8 @@ def main():
             speak("Now Listening")
             audio = rec.listen(source)
             
-        # Tries to recognize what the user said
-        # else, throws an error
+            # Tries to recognize what the user said
+            # else, throws an error
             try:
                 phrase = rec.recognize_google(audio)
                 speak("You said: ", str(phrase))
