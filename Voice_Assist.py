@@ -46,7 +46,7 @@ def play_hangman():
     
     # All the possible words to guess
     words = ["pizza", "sleep", "bike", "apple", "tea",
-             "time", "facebook", "helsinki", "develope", "hammer"]
+             "time", "facebook", "helsinki", "develop", "hammer"]
 
     # Picks a random word from the list
     word = random.choice(words)
@@ -57,7 +57,6 @@ def play_hangman():
     guesses = ""
 
     speak("Lets play hangman. You can only get 6 guesses wrong or else you lose. Let's begin")
-    time.sleep(2)
 
     while num_guesses != 6:
 
@@ -79,19 +78,18 @@ def play_hangman():
         # Listens and get user input through internal Microphones
         with mic as source:
             speak("What is your guess?")
-            rec.adjust_for_ambient_noise(source)
             audio = rec.listen(source)
             
-        # Tries to recognize what the user said
-        try:
-            phrase = rec.recognize_google(audio)
-            speak("Your guess was the letter ", str(phrase))
-            print("\nYour guess: " + str(phrase))
+            # Tries to recognize what the user said
+            try:
+                phrase = rec.recognize_google(audio)
+                speak("Your guess was the letter ", str(phrase))
+                print("\nYour guess: " + str(phrase))
 
-        except sr.UnknownValueError:
-            phrase = "Unable to recognize speech. Try again"
-            speak(str(phrase))
-            exception = 1
+            except sr.UnknownValueError:
+                phrase = "Unable to recognize speech. Try again"
+                speak(str(phrase))
+                exception = 1
 
     
         if not phrase.isalpha() and not exception:
@@ -293,21 +291,19 @@ def main():
         # Gets user input through internal Microphones
         with mic as source:
             speak("Now Listening")
-
-            rec.adjust_for_ambient_noise(source)
             audio = rec.listen(source)
             
         # Tries to recognize what the user said
         # else, throws an error
-        try:
-            phrase = rec.recognize_google(audio)
-            speak("You said: ", str(phrase))
-            print("\nYou said: " + str(phrase) + "\n")
+            try:
+                phrase = rec.recognize_google(audio)
+                speak("You said: ", str(phrase))
+                print("\nYou said: " + str(phrase) + "\n")
 
-        except sr.UnknownValueError:
-            phrase = "Unable to recognize command. Try again....."
-            speak(str(phrase))
-            exception = 1
+            except sr.UnknownValueError:
+                phrase = "Unable to recognize command. Try again....."
+                speak(str(phrase))
+                exception = 1
 
         # Checks the recognized speech to see if it 
         # is a valid command, else throws error message
