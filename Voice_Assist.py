@@ -15,17 +15,16 @@ def visit_Site(audio):
 
     if '.com' in audio or '.org' in audio:
         site = audio.partition("check ")[2]
-        speak("Visiting ", str(site))
+        speak(f"Visiting {site}")
         # Opens new tab to website
-        webbrowser.open_new_tab("http://www." + str(site))
-
+        webbrowser.open_new_tab(f"http://www.{site}")
     else:
         site = audio.partition("check ")[2]
-        speak("Visiting ", str(site))
+        speak(f"Visiting {site}")
         # Opens new tab to website
-        webbrowser.open_new_tab("http://www." + str(site) + ".com")
+        webbrowser.open_new_tab(f"http://www.{site}.com")
 
-    time.sleep(3)
+    time.sleep(2)
 
 
 # Opens a new tab and performs a 
@@ -33,12 +32,11 @@ def visit_Site(audio):
 def search_Google(audio):
 
     query = audio.partition("search ")[2]
-    speak("Searching Google for: ", str(query))
-
+    speak(f"Searching Google for: {query}")
     # Opens Google with specified search
-    webbrowser.open("https://www.google.com/search?q=" + str(query))
+    webbrowser.open(f"https://www.google.com/search?q={query}")
 
-    time.sleep(3)
+    time.sleep(2)
 
 
 # Inititates a game of hangman with the user
@@ -83,8 +81,8 @@ def play_hangman():
             # Tries to recognize what the user said
             try:
                 phrase = rec.recognize_google(audio)
-                speak("Your guess was the letter ", str(phrase))
-                print("\nYour guess: " + str(phrase))
+                speak(f"Your guess was the letter {phrase}")
+                print(f"\nYour guess: {phrase}")
 
             except sr.UnknownValueError:
                 phrase = "Unable to recognize speech. Try again"
@@ -96,19 +94,17 @@ def play_hangman():
             speak("Invalid guess, make sure your guess is only a letter.")
         
         elif phrase.lower() == word:
-
             print("\n" + "*" * 37)
-            print("YOU WON! The word was: " + str(word))
+            print(f"YOU WON! The word was: {word}")
             print("*" * 37 + "\n")
             
-            speak("YOU WON! The word was ", str(word))
+            speak(f"YOU WON! The word was {word}")
 
             print_Menu()
             time.sleep(1)
             return
 
         elif len(phrase.lower()) > 1 and phrase.lower() != word and not exception:
-
             engine.say("INCORRECT GUESS. " + str(phrase.lower()) + " is not the word.")
             engine.runAndWait()
 
@@ -116,7 +112,6 @@ def play_hangman():
             time.sleep(1)
 
         elif phrase.lower() not in word and not exception:
-
             engine.say("INCORRECT GUESS. The letter " + str(phrase.lower()) + " is not in the word.")
             engine.runAndWait()
 
@@ -126,7 +121,6 @@ def play_hangman():
             time.sleep(1)
 
         elif phrase.lower() in word:
-
             guesses += phrase.lower()
             blanks = [word[x] if word[x] in guesses else '_' for x in range(len(word))]
 
@@ -138,10 +132,10 @@ def play_hangman():
 
             if status == word:
                 print("\n" + "*" * 37)
-                print("YOU WON! The word was: " + str(word))
+                print(f"YOU WON! The word was: {word}")
                 print("*" * 37 + "\n")
                
-                speak("YOU WON! The word was: ", str(word))
+                speak(f"YOU WON! The word was: {word}")
 
                 print_Menu()
                 time.sleep(1)
@@ -150,10 +144,10 @@ def play_hangman():
     # Prints loser message if the user
     # gets 6 strikes
     print("\n" + ":( " * 11)
-    print("YOU LOST! The word was: " + str(word))
+    print(f"YOU LOST! The word was: {word}")
     print(":( " * 11 + "\n")
     
-    speak("YOU LOST! The word was: ", str(word))
+    speak(f"YOU LOST! The word was: {word}")
     
     print_Menu()
     time.sleep(1)
@@ -165,28 +159,21 @@ def play_hangman():
 def calculate(audio):
 
     equation = str(audio)
-    
     # Gets all the numbers from the user input speech
     nums = [int(i) for i in equation.split() if i.isdigit()]
-
     # Extract the whole expression from the user input speech
     expression = audio.partition("compute ")[2]
 
-    if len(nums) > 1 and len(expression) > 0:    
-
+    if len(nums) > 1 and len(expression) > 0: 
         answer = eval(expression)
-
         rounded = round(answer, 2)
-
-        print("\n" + str(expression) + " is equal to " + str(rounded) + "\n")
-
-        speak("The answer is: ", str(rounded))
+        print(f"\n{expression}  is equal to {rounded}\n")
+        speak(f"The answer is: {rounded}")
 
     else:
         speak("Sorry, can you say the equation one more time?")
         
     time.sleep(1)
-
 
 
 # Gets the current weather of the 
@@ -211,7 +198,7 @@ def get_Weather(audio):
     else:
         city = cities[0]
   
-    complete_url = url + "appid=" + my_API_key + "&q=" + city 
+    complete_url = f"{url}appid={my_API_key}&q={city}"
 
     # Gets the response from the API
     response = requests.get(complete_url) 
@@ -230,20 +217,18 @@ def get_Weather(audio):
         humidity = y["humidity"]
 
         WS = x["wind"]
-
         wind_speed = int(WS["speed"])
-
         WD = x["weather"] 
 
         weather_description = WD[0]["description"] 
 
-        engine.say("It is currently " + str(updated_temp) + " degrees fahrenheit")
+        engine.say(f"It is currently {updated_temp} degrees fahrenheit")
         engine.runAndWait()
-        engine.say("With a " + str(humidity) + " percent humidity percentage")
+        engine.say(f"With a {humidity} percent humidity percentage")
         engine.runAndWait()
-        engine.say("Wind speed is " + str(wind_speed) + " miles per hour")
+        engine.say(f"Wind speed is {wind_speed} miles per hour")
         engine.runAndWait()
-        engine.say("And there are currently " + str(weather_description) + "s")
+        engine.say(f"And there are currently {weather_description}s")
         engine.runAndWait()
 
     else:
@@ -276,7 +261,6 @@ def print_Menu():
 def main():
 
     print_Menu()
-
     input("\nPress \'Enter\' to continue.\n")
 
     run = True
@@ -297,8 +281,8 @@ def main():
             # else, throws an error
             try:
                 phrase = rec.recognize_google(audio)
-                speak("You said: ", str(phrase))
-                print("\nYou said: " + str(phrase) + "\n")
+                speak(f"You said: {phrase}")
+                print(f"\nYou said: {phrase}\n")
 
             except sr.UnknownValueError:
                 phrase = "Unable to recognize command. Try again....."
@@ -327,7 +311,7 @@ def main():
             run = False
 
         elif not exception:
-            engine.say(str(phrase) + " is not a valid command. Try again")
+            engine.say(f"{phrase} is not a valid command. Try again")
             engine.runAndWait()
         
 
